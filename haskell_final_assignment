@@ -26,7 +26,6 @@ mainmenu adminproject = do
     putStrLn "(r) View All Data"
     putStrLn "(x) Exit"
     choicemenu <- getLine
-
     case choicemenu of
         "a" -> do
                putStr "Project Name: "
