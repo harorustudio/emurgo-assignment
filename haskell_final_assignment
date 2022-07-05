@@ -33,9 +33,6 @@ mainmenu adminproject = do
                let projecton = parse contents
                    output = map projDataCenter (filterProj animname projstat projecton)
                let countLines = length output
-              --  putStrLn (unlines output)
                if countLines == 5 && projstat == "ongoing" then putStrLn "Please, find another animator to assign!"
                else putStrLn "Data Saved!"
-
-              --  putStrLn ("Number of Project : " ++ show countLines)
         "x" -> putStrLn "Thank you!!"
