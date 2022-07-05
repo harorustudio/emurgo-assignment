@@ -1,0 +1,41 @@
+{-# LANGUAGE BlockArguments #-}
+
+data ProjAdmin = ProjAdmin {projName :: String, projanimator :: String, projStatus :: String} deriving (Show)
+parse :: String -> [ProjAdmin]
+parse txt = let rows = map words (lines txt)
+            in map (\[project_name, animator, stat]-> ProjAdmin project_name animator stat) rows
+
+filterProj :: String->String->[ProjAdmin]->[ProjAdmin]
+filterProj animname projstat = filter(\p -> projanimator p == animname && projStatus p==projstat )
+
+projDataCenter :: ProjAdmin -> String
+projDataCenter (ProjAdmin project_name animator stat) = unwords [project_name, animator, stat]
+
+main ::IO ()
+main = mainmenu []
+
+mainmenu ::  [ProjAdmin] -> IO()
+mainmenu adminproject = do
+    putStrLn "(a) Add New Project"
+    putStrLn "(x) Exit"
+    choicemenu <- getLine
+
+    case choicemenu of
+        "a" -> do
+               putStr "Project Name: "
+               projname <- getLine
+               putStr "Animator Name:  "
+               animname <- getLine
+               putStr "Project Status: "
+               projstat <- getLine
+               let logsfiles = "projdata.txt"
+               contents <- readFile logsfiles
+               let projecton = parse contents
+                   output = map projDataCenter (filterProj animname projstat projecton)
+               let countLines = length output
+              --  putStrLn (unlines output)
+               if countLines == 5 && projstat == "ongoing" then putStrLn "Please, find another animator to assign!"
+               else putStrLn "Data Saved!"
+
+              --  putStrLn ("Number of Project : " ++ show countLines)
+        "x" -> putStrLn "Thank you!!"
