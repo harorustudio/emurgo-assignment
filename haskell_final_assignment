@@ -1,4 +1,7 @@
-{-# LANGUAGE BlockArguments #-}
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+import Control.Concurrent
+
+
 
 data ProjAdmin = ProjAdmin {projName :: String, projanimator :: String, projStatus :: String} deriving (Show)
 parse :: String -> [ProjAdmin]
@@ -14,9 +17,13 @@ projDataCenter (ProjAdmin project_name animator stat) = unwords [project_name, a
 main ::IO ()
 main = mainmenu []
 
+logsfiles :: String
+logsfiles = "datalog.txt"
+
 mainmenu ::  [ProjAdmin] -> IO()
 mainmenu adminproject = do
     putStrLn "(a) Add New Project"
+    putStrLn "(r) View All Data"
     putStrLn "(x) Exit"
     choicemenu <- getLine
 
@@ -28,11 +35,24 @@ mainmenu adminproject = do
                animname <- getLine
                putStr "Project Status: "
                projstat <- getLine
-               let logsfiles = "projdata.txt"
                contents <- readFile logsfiles
                let projecton = parse contents
                    output = map projDataCenter (filterProj animname projstat projecton)
                let countLines = length output
-               if countLines == 5 && projstat == "ongoing" then putStrLn "Please, find another animator to assign!"
-               else putStrLn "Data Saved!"
+               if (projname == "" && animname == "" && projstat == "") then do putStrLn "Please, Input All Data"
+               else if countLines == 5 && projstat == "ongoing" then putStrLn "Please, find another animator to assign!"
+                    else do
+                       let inputlogs = projname ++ " " ++ animname ++ " " ++ projstat ++ "\n"
+                       appendFile logsfiles inputlogs
+                       putStrLn "Data Saved!"
+                       main
+        "r" -> do
+               view <- readFile logsfiles
+               putStrLn view
         "x" -> putStrLn "Thank you!!"
+
+
+
+
+
+
