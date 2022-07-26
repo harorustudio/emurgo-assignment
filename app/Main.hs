@@ -279,6 +279,7 @@ dataDeleted newData (Just deleted) = do
   hPutStrLn fileOpen newData
   putStrLn "Success Delete Data\n"
   hClose fileOpe
+  listOfMenu
 
 
 -- PRINT/READ DATA FUNCTIONS
