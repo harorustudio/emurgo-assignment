@@ -278,7 +278,7 @@ dataDeleted newData (Just deleted) = do
   deletedData <- getField datafound
   hPutStrLn fileOpen newData
   putStrLn "Success Delete Data\n"
-  hClose fileOpe
+  hClose fileOpen
   listOfMenu
 
 
